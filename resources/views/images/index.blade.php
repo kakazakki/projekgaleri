@@ -34,7 +34,7 @@
                      <!-- Inside the foreach loop -->
 <form action="{{ route('images.like', $image->id) }}" method="POST">
     @csrf
-    <button type="submit" class="btn btn-info">Like</button>
+    <button type="submit" class="btn btn-info">♡</button>
 </form>
 
                         </div>
@@ -44,4 +44,5 @@
         @endforeach
     </div>
 </div>
+<li class="nav-item"><a href="login#">Logout</a></li>
 @endsection

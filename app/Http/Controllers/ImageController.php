@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Image;
+use App\Models\LikeFoto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -21,7 +22,10 @@ class ImageController extends Controller
             'image' => 'required|image|max:2048',
         ]);
 
+        // Simpan gambar ke penyimpanan dan dapatkan pathnya
         $imagePath = $request->file('image')->store('public/images');
+
+        // Simpan informasi tentang gambar ke basis data
         $image = new Image([
             'title' => $request->get('title'),
             'image_path' => $imagePath,
@@ -44,9 +48,24 @@ class ImageController extends Controller
         // Redirect atau memberikan respons sesuai kebutuhan aplikasi Anda
         return redirect()->back()->with('success', 'Image deleted successfully');
     }
-    public function like(Image $image)
+    public function like(Request $request, Image $image)
     {
-        $image->increment('likes'); // Increment the likes count for the image
-        return redirect()->back(); // Redirect back to the page after liking
+        // Pastikan pengguna belum memberikan "like" sebelumnya
+        if (!LikeFoto::where('users_id', auth()->id())->where('foto_id', $image->id)->exists()) {
+            // Tambahkan entri baru ke dalam tabel like_foto
+            LikeFoto::create([
+                'users_id' => auth()->id(),
+                'foto_id' => $image->id,
+                'tanggal_like' => now(),
+            ]);
+
+            // Update jumlah "likes" di tabel images
+            $image->increment('likes');
+
+            // Simpan perubahan ke dalam basis data
+            $image->save();
+        }
+
+        return redirect()->back(); // Redirect kembali ke halaman setelah memberikan "like"
     }
 }

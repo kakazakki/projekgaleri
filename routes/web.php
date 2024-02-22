@@ -23,7 +23,8 @@ Route::get('/', function () {
 Route::get('/images', [ImageController::class, 'index']);
 Route::post('/images/upload', [ImageController::class, 'store']);
 Route::delete('/images/{id}', [ImageController::class, 'delete'])->name('images.delete');
-Route::likes('/images/{image}/like', [ImageController::class, 'like'])->name('images.like');
+Route::post('/images/{image}/like', [ImageController::class, 'like'])->name('images.like');
+
 
 
 // Login
@@ -35,4 +36,5 @@ Route::get('/register', [AuthController::class, 'register'])->name('auth.registe
 Route::post('/register', [AuthController::class, 'store'])->name('auth.store');
 
 // Logout
-Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
+Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
+

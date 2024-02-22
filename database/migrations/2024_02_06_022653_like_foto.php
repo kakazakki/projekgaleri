@@ -15,8 +15,9 @@ return new class extends Migration {
             $table->unsignedBigInteger('users_id');
             $table->foreign('users_id')->references('id')->on('users');
             $table->unsignedBigInteger('foto_id');
-            $table->foreign('foto_id')->references('id')->on('foto');
+            $table->foreign('foto_id')->references('id')->on('images');
             $table->timestamp('tanggal_like');
+            $table->integer('likes');
             $table->timestamps();
         });
     }
